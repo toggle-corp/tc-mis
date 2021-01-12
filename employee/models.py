@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.html import mark_safe
+import datetime
 
 # Create your models here.
 
@@ -27,9 +28,9 @@ class Employee(models.Model):
     fullname = models.CharField(max_length=255, verbose_name='Full Name')
     dob = models.DateField(verbose_name='Date of Birth')
     gender = models.IntegerField(choices=GENDER)
-    email = models.EmailField(max_length=255)
-    pan_no = models.CharField(max_length=255)
-    citizenship_no = models.CharField(max_length=255)
+    email = models.EmailField(max_length=255, unique=True)
+    pan_no = models.CharField(max_length=255, unique=True)
+    citizenship_no = models.CharField(max_length=255, unique=True)
     designation = models.ForeignKey(
         Designation, on_delete=models.DO_NOTHING)
     join_date = models.DateField()
@@ -37,8 +38,8 @@ class Employee(models.Model):
     status = models.IntegerField(choices=STATUSES)
     createdBy = models.PositiveIntegerField()
     updatedBy = models.PositiveIntegerField()
-    createdAt = models.DateField(auto_now=True)
-    updatedAt = models.DateField(auto_now=True)
+    createdAt = models.DateTimeField(auto_now=True)
+    updatedAt = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "employees"
@@ -46,6 +47,7 @@ class Employee(models.Model):
     def __str__(self):
         return self.fullname
 
+    # To display picture in List view
     def picture_tag(self):
         if self.picture:
             return mark_safe('<img src="%s" width="150" height="150" />' % (self.picture))
@@ -55,8 +57,12 @@ class Employee(models.Model):
     picture_tag.allow_tags = True
     picture_tag.short_description = 'Picture'
 
-    def save(self, *args, **kwargs):
-        self.createdBy = 2
-        self.updatedBy = 2
-        print(*args)
+    # Save Employee Data
+    def save(self,  *args, **kwargs):
+        if self.createdBy:
+            self.updatedBy = 20
+            self.updatedAt = datetime.datetime.now()
+        else:
+            self.createdBy = 20
+            self.updatedBy = 20
         super(Employee, self).save(*args, **kwargs)
