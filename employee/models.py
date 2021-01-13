@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.html import mark_safe
 import datetime
-
+from django_currentuser.middleware import get_current_authenticated_user
 # Create your models here.
 
 
@@ -29,15 +29,21 @@ class Employee(models.Model):
     dob = models.DateField(verbose_name='Date of Birth')
     gender = models.IntegerField(choices=GENDER)
     email = models.EmailField(max_length=255, unique=True)
+    phone_number = models.PositiveIntegerField()
+    address = models.CharField(max_length=255)
     pan_no = models.CharField(max_length=255, unique=True)
     citizenship_no = models.CharField(max_length=255, unique=True)
     designation = models.ForeignKey(
         Designation, on_delete=models.DO_NOTHING)
     join_date = models.DateField()
     picture = models.ImageField(upload_to='pictures/')
+    pan_no_document = models.ImageField(upload_to='pictures/')
+    cititzen_document = models.ImageField(upload_to='pictures/')
     status = models.IntegerField(choices=STATUSES)
-    createdBy = models.PositiveIntegerField()
-    updatedBy = models.PositiveIntegerField()
+    createdBy = models.ForeignKey(
+        User, on_delete=models.DO_NOTHING, related_name="createdBy")
+    updatedBy = models.ForeignKey(
+        User, on_delete=models.DO_NOTHING, related_name="updatedBy")
     createdAt = models.DateTimeField(auto_now=True)
     updatedAt = models.DateTimeField(auto_now=True)
 
@@ -59,10 +65,12 @@ class Employee(models.Model):
 
     # Save Employee Data
     def save(self,  *args, **kwargs):
-        if self.createdBy:
-            self.updatedBy = 20
+        # Insert data
+        if self.id:
+            self.updatedBy = get_current_authenticated_user()
             self.updatedAt = datetime.datetime.now()
+        # Update data
         else:
-            self.createdBy = 20
-            self.updatedBy = 20
+            self.createdBy = get_current_authenticated_user()
+            self.updatedBy = get_current_authenticated_user()
         super(Employee, self).save(*args, **kwargs)
