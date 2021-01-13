@@ -29,16 +29,16 @@ class Employee(models.Model):
     dob = models.DateField(verbose_name='Date of Birth')
     gender = models.IntegerField(choices=GENDER)
     email = models.EmailField(max_length=255, unique=True)
-    phone_number = models.PositiveIntegerField()
+    phone_number = models.BigIntegerField()
     address = models.CharField(max_length=255)
     pan_no = models.CharField(max_length=255, unique=True)
     citizenship_no = models.CharField(max_length=255, unique=True)
     designation = models.ForeignKey(
         Designation, on_delete=models.DO_NOTHING)
     join_date = models.DateField()
-    picture = models.ImageField(upload_to='pictures/')
-    pan_no_document = models.ImageField(upload_to='pictures/')
-    cititzen_document = models.ImageField(upload_to='pictures/')
+    picture = models.ImageField(upload_to='images/')
+    pan_no_document = models.ImageField(upload_to='images/')
+    cititzen_document = models.ImageField(upload_to='images/')
     status = models.IntegerField(choices=STATUSES)
     createdBy = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, related_name="createdBy")
@@ -56,12 +56,12 @@ class Employee(models.Model):
     # To display picture in List view
     def picture_tag(self):
         if self.picture:
-            return mark_safe('<img src="%s" width="150" height="150" />' % (self.picture))
+            return mark_safe('<img src="%s" width="50" height="50" />' % (self.picture.url))
         else:
             return mark_safe(
                 '<img src="https://togglecorp.com/favicon.ico" alt="ToggleCorp" title="ToggleCorp" width="50" height="50"/>')
-    picture_tag.allow_tags = True
     picture_tag.short_description = 'Picture'
+    picture_tag.allow_tags = True
 
     # Save Employee Data
     def save(self,  *args, **kwargs):
