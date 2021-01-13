@@ -38,9 +38,9 @@ class Employee(models.Model):
     citizenship_no = models.CharField(max_length=255, unique=True)
     designation = models.ForeignKey(Designation, on_delete=models.DO_NOTHING)
     join_date = models.DateField()
-    picture = models.ImageField(upload_to='images/')
-    pan_no_document = models.ImageField(upload_to='images/')
-    cititzen_document = models.ImageField(upload_to='images/')
+    picture = models.ImageField(upload_to='images/pictures/')
+    pan_no_document = models.ImageField(upload_to='images/pans/')
+    cititzen_document = models.ImageField(upload_to='images/citizenships/')
     status = models.IntegerField(choices=STATUSES)
     createdBy = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, related_name="createdBy"
