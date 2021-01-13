@@ -9,9 +9,6 @@ from django_currentuser.middleware import get_current_authenticated_user
 class Designation(models.Model):
     type = models.CharField(max_length=100)
 
-    class Meta:
-        db_table = "designations"
-
     def __str__(self):
         return self.type
 
@@ -46,9 +43,6 @@ class Employee(models.Model):
         User, on_delete=models.DO_NOTHING, related_name="updatedBy")
     createdAt = models.DateTimeField(auto_now=True)
     updatedAt = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = "employees"
 
     def __str__(self):
         return self.fullname
