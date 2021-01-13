@@ -27,12 +27,16 @@ class Employee(models.Model):
     dob = models.DateField(verbose_name='Date of Birth')
     gender = models.IntegerField(choices=GENDER)
     email = models.EmailField(max_length=255, unique=True)
+<<<<<<< HEAD
     phone_number = models.CharField(max_length=16, validators=[
         RegexValidator(
             regex=r'^\+977\s-?\d{10}$',
             message="Phone number must be entered in the format '+977 9999999999'."
         ),
     ],)
+=======
+    phone_number = models.BigIntegerField()
+>>>>>>> c1b743386e9a1dae4e6ccb59767d0a8f7179666d
     address = models.CharField(max_length=255)
     pan_no = models.CharField(max_length=255, unique=True)
     citizenship_no = models.CharField(max_length=255, unique=True)
