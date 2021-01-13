@@ -73,4 +73,4 @@ class Employee(models.Model):
         else:
             self.createdBy = get_current_authenticated_user()
             self.updatedBy = get_current_authenticated_user()
-        super(Employee, self).save(*args, **kwargs)
+        return super(Employee, self).save(*args, **kwargs)
