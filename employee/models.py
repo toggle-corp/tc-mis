@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.html import mark_safe
 import datetime
 from django_currentuser.middleware import get_current_authenticated_user
+from django.core.validators import RegexValidator
 # Create your models here.
 
 
@@ -26,23 +27,29 @@ class Employee(models.Model):
     dob = models.DateField(verbose_name='Date of Birth')
     gender = models.IntegerField(choices=GENDER)
     email = models.EmailField(max_length=255, unique=True)
-    phone_number = models.PositiveIntegerField()
+    phone_number = models.CharField(max_length=16, validators=[
+        RegexValidator(
+            regex=r'^\+977\s-?\d{10}$',
+            message="Phone number must be entered in the format '+977 9999999999'."
+        ),
+    ],)
     address = models.CharField(max_length=255)
     pan_no = models.CharField(max_length=255, unique=True)
     citizenship_no = models.CharField(max_length=255, unique=True)
-    designation = models.ForeignKey(
-        Designation, on_delete=models.DO_NOTHING)
+    designation = models.ForeignKey(Designation, on_delete=models.PROTECT)
     join_date = models.DateField()
-    picture = models.ImageField(upload_to='pictures/')
-    pan_no_document = models.ImageField(upload_to='pictures/')
-    cititzen_document = models.ImageField(upload_to='pictures/')
+    picture = models.ImageField(upload_to='images/pictures/')
+    pan_no_document = models.ImageField(upload_to='images/pans/')
+    citizenship_document = models.ImageField(upload_to='images/citizenships/')
     status = models.IntegerField(choices=STATUSES)
-    createdBy = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, related_name="createdBy")
-    updatedBy = models.ForeignKey(
-        User, on_delete=models.DO_NOTHING, related_name="updatedBy")
-    createdAt = models.DateTimeField(auto_now=True)
-    updatedAt = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="created_by"
+    )
+    updated_by = models.ForeignKey(
+        User, on_delete=models.PROTECT, related_name="updated_by"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.fullname
@@ -50,12 +57,12 @@ class Employee(models.Model):
     # To display picture in List view
     def picture_tag(self):
         if self.picture:
-            return mark_safe('<img src="%s" width="150" height="150" />' % (self.picture))
+            return mark_safe('<img src="%s" width="50" height="50" />' % (self.picture.url))
         else:
             return mark_safe(
                 '<img src="https://togglecorp.com/favicon.ico" alt="ToggleCorp" title="ToggleCorp" width="50" height="50"/>')
-    picture_tag.allow_tags = True
     picture_tag.short_description = 'Picture'
+    picture_tag.allow_tags = True
 
     # Save Employee Data
     def save(self,  *args, **kwargs):
