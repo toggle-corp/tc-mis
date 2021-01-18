@@ -9,9 +9,6 @@ from department.models import Department
 from .managers import EmployeeManager
 
 
-# Create your models here.
-
-
 class Designation(models.Model):
     type = models.CharField(max_length=100)
 

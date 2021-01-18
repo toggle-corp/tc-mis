@@ -46,7 +46,8 @@ ALLOWED_HOSTS = []
 
 LOCAL_APPS = [
     'employee.apps.EmployeeConfig',
-    'department.apps.DepartmentConfig'
+    'department.apps.DepartmentConfig',
+    'leave_request.apps.LeaveRequestConfig'
 ]
 
 THIRD_PARTY_APPS = [
