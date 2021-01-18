@@ -44,17 +44,25 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+LOCAL_APPS = [
+    'employee.apps.EmployeeConfig',
+    'department.apps.DepartmentConfig'
+]
+
+THIRD_PARTY_APPS = [
+    'django_seed'
+]
+
+CORE_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'employee.apps.EmployeeConfig',
-    'django_seed',
-    'department.apps.DepartmentConfig'
+    'django.contrib.staticfiles'
 ]
+
+INSTALLED_APPS = CORE_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
