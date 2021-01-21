@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from .models import Employee, Designation
-from .forms import EmployeeCreationForm, EmployeeChangeForm
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import PermissionsMixin
+
+from .models import Employee, Designation
+
+from .forms import EmployeeCreationForm, EmployeeChangeForm
+
 
 # Remove fields from fieldset
 
@@ -96,19 +99,15 @@ class EmployeeAdmin(UserAdmin):
     ordering = ('email',)
 
     def get_queryset(self, request):
-        if request.user.is_staff is True and request.user.is_superuser is False:
-            return Employee.objects.filter(email=request.user.email)
-        return Employee.objects.all()
+        if request.user.is_superuser:
+            return Employee.objects.all()
+        return Employee.objects.filter(email=request.user.email)
 
     def has_add_permission(self, request):
-        if request.user.is_staff is True and request.user.is_superuser is False:
-            return False
-        return True
+        return request.user.is_superuser
 
     def has_delete_permission(self, request, obj=None):
-        if request.user.is_staff is True and request.user.is_superuser is False:
-            return False
-        return True
+        return request.user.is_superuser
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = super(EmployeeAdmin, self).get_fieldsets(request, obj)
