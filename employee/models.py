@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.html import mark_safe
 from django_currentuser.middleware import get_current_authenticated_user
+from django_enumfield import enum
 
 from department.models import Department
 from .managers import EmployeeManager
@@ -19,16 +20,16 @@ class Designation(models.Model):
         return self.type
 
 
+class GENDER(enum.Enum):
+    Female = 0
+    Male = 1
+
+
 class Employee(AbstractUser):
     username = None
-    GENDER = (
-        (0, 'Female'),
-        (1, 'Male'),
-    )
-
     fullname = models.CharField(max_length=255, verbose_name='Full Name')
     dob = models.DateField(verbose_name='Date of Birth', null=True, blank=True)
-    gender = models.IntegerField(choices=GENDER, null=True, blank=True)
+    gender = enum.EnumField(GENDER, null=True)
     email = models.EmailField(max_length=255, unique=True)
     phone_number = models.CharField(max_length=16, validators=[
         RegexValidator(
@@ -72,9 +73,10 @@ class Employee(AbstractUser):
     def __str__(self):
         return self.fullname
 
-    # To display picture in List view
-    @property
     def picture_tag(self):
+        """
+        To display picture in List view
+        """
         if self.picture:
             return mark_safe('<img src="%s" width="50" height="50" />' % self.picture.url)
         else:
