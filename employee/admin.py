@@ -1,37 +1,19 @@
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin
-from django.contrib.auth.models import PermissionsMixin
 
 from .models import Employee, Designation
 
 from .forms import EmployeeCreationForm, EmployeeChangeForm
 
 
-# Remove fields from fieldset
-
-
-def remove_from_fieldsets(fieldsets, fields):
-    for fieldset in fieldsets:
-        for field in fields:
-            if field in fieldset[1]['fields']:
-                new_fields = []
-                for new_field in fieldset[1]['fields']:
-                    if not new_field in fields:
-                        new_fields.append(new_field)
-
-                fieldset[1]['fields'] = tuple(new_fields)
-                break
-
-# Remove fieldsets
-
-
 def remove_fieldsets(fieldsets, fieldsetname):
-    new_fieldsets = []
-    for fieldset in fieldsets:
-        if fieldset[0] is not fieldsetname:
-            new_fieldsets.append(fieldset)
-    return new_fieldsets
+    """
+    Remove fieldset from fieldsets using name
+    """
+    return [
+        fieldset for fieldset in fieldsets if fieldset[0] != fieldsetname
+    ]
 
 
 class EmployeeAdmin(UserAdmin):
@@ -111,7 +93,7 @@ class EmployeeAdmin(UserAdmin):
 
     def get_fieldsets(self, request, obj=None):
         fieldsets = super(EmployeeAdmin, self).get_fieldsets(request, obj)
-        if not request.user.is_superuser and request.user.groups.filter(name='publisher').count() == 0:
+        if not request.user.is_superuser:
             return remove_fieldsets(fieldsets, 'Permissions')
         return fieldsets
 
@@ -119,7 +101,7 @@ class EmployeeAdmin(UserAdmin):
         form = super().get_form(request, obj, **kwargs)
 
         disabled_fields = set()
-        if request.user.is_staff and not request.user.is_superuser:
+        if not request.user.is_superuser:
             disabled_fields |= {
                 'designation',
                 'department',
@@ -146,7 +128,7 @@ class DesignationAdmin(admin.ModelAdmin):
 
     # Hiding Model (Example: Designations)
     def get_model_perms(self, request):
-        if request.user.is_staff is True and request.user.is_superuser is False:
+        if not request.user.is_superuser:
             return {}
         return {
             'add': self.has_add_permission(request),

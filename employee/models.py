@@ -1,14 +1,14 @@
-from django.db import models
-from django.utils.html import mark_safe
-import datetime
-from django_currentuser.middleware import get_current_authenticated_user
-from django.core.validators import RegexValidator
-from django.utils import timezone
-from department.models import Department
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import PermissionsMixin
+from django.core.validators import RegexValidator
+from django.db import models
+from django.utils import timezone
+from django.utils.html import mark_safe
+from django_currentuser.middleware import get_current_authenticated_user
 
+from department.models import Department
 from .managers import EmployeeManager
+
+
 # Create your models here.
 
 
@@ -73,17 +73,20 @@ class Employee(AbstractUser):
         return self.fullname
 
     # To display picture in List view
+    @property
     def picture_tag(self):
         if self.picture:
-            return mark_safe('<img src="%s" width="50" height="50" />' % (self.picture.url))
+            return mark_safe('<img src="%s" width="50" height="50" />' % self.picture.url)
         else:
             return mark_safe(
-                '<img src="https://togglecorp.com/favicon.ico" alt="ToggleCorp" title="ToggleCorp" width="50" height="50"/>')
+                '<img src="https://togglecorp.com/favicon.ico" alt="ToggleCorp" title="ToggleCorp" width="50" '
+                'height="50"/>')
+
     picture_tag.short_description = 'Picture'
     picture_tag.allow_tags = True
 
     # Save Employee Data
-    def save(self,  *args, **kwargs):
+    def save(self, *args, **kwargs):
         # Update data
         if self.id:
             self.updated_by = get_current_authenticated_user()
@@ -94,14 +97,9 @@ class Employee(AbstractUser):
         super(Employee, self).save(*args, **kwargs)
 
     def has_module_perms(self, app_label):
-        if self.is_superuser is True:
+        if self.is_superuser:
             return True
-        elif self.is_staff is True and self.is_superuser is False:
-            if app_label is 'department':
+        else:
+            if app_label == 'department':
                 return False
         return True
-
-    def has_perm(self, perm, obj=None):
-        if perm is 'employee.view_designation':
-            return self.is_superuser
-        return self.is_staff
