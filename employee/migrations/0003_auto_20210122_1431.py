@@ -15,6 +15,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='employee',
             name='gender',
-            field=django_enumfield.db.fields.EnumField(blank=True, enum=employee.models.GENDER, null=True),
+            field=django_enumfield.db.fields.EnumField(blank=True, enum=employee.models.Employee.GENDER, null=True),
         ),
     ]

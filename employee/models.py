@@ -3,7 +3,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.html import mark_safe
-from django_currentuser.middleware import get_current_authenticated_user
+from django_currentuser.db.models import CurrentUserField
 from django_enumfield import enum
 
 from department.models import Department
@@ -20,12 +20,18 @@ class Designation(models.Model):
         return self.type
 
 
-class GENDER(enum.Enum):
-    Female = 0
-    Male = 1
+class UserResourceMixin:
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    created_by = CurrentUserField()
+    updated_by = CurrentUserField(on_update=True)
 
 
-class Employee(AbstractUser):
+class Employee(UserResourceMixin, AbstractUser):
+    class GENDER(enum.Enum):
+        Female = 0
+        Male = 1
+
     username = None
     fullname = models.CharField(max_length=255, verbose_name='Full Name')
     dob = models.DateField(verbose_name='Date of Birth', null=True, blank=True)
@@ -44,7 +50,7 @@ class Employee(AbstractUser):
         max_length=255, unique=True, null=True, blank=True)
     designation = models.ForeignKey(
         Designation, on_delete=models.PROTECT, null=True, blank=True)
-    join_date = models.DateField(default=timezone.now)
+    join_date = models.DateField(auto_now_add=True)
     picture = models.ImageField(
         upload_to='images/pictures/', blank=True, null=True)
     pan_no_document = models.ImageField(
@@ -56,14 +62,6 @@ class Employee(AbstractUser):
         Department, on_delete=models.PROTECT, related_name='department', null=True
     )
     is_staff = models.BooleanField(default=True)
-    created_by = models.ForeignKey(
-        'self', on_delete=models.PROTECT, related_name="who_created", blank=True, null=True
-    )
-    updated_by = models.ForeignKey(
-        'self', on_delete=models.PROTECT, related_name="who_updated", blank=True, null=True
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['fullname']
@@ -87,21 +85,5 @@ class Employee(AbstractUser):
     picture_tag.short_description = 'Picture'
     picture_tag.allow_tags = True
 
-    # Save Employee Data
-    def save(self, *args, **kwargs):
-        # Update data
-        if self.id:
-            self.updated_by = get_current_authenticated_user()
-        # Insert data
-        else:
-            self.created_by = get_current_authenticated_user()
-            self.updated_by = get_current_authenticated_user()
-        super(Employee, self).save(*args, **kwargs)
-
     def has_module_perms(self, app_label):
-        if self.is_superuser:
-            return True
-        else:
-            if app_label == 'department':
-                return False
-        return True
+        return self.is_superuser or app_label != 'department'
