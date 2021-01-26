@@ -1,0 +1,23 @@
+{% extends "admin/base.html" %} {% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">{{ site_header|default:_('MIS Admin') }}</a>
+</h1>
+{% endblock %} {% block nav-global %}{% endblock %} {% block content %}
+<div>
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" value="" name="id" id="leave_reject"/>
+        <label for="decline_reasons">Decline Reason: </label>
+        <textarea rows="4" cols="50" name="decline_reasons"></textarea>
+        <input type="submit" value="Submit"/>
+    </form>
+</div>
+
+<script>
+  var url = window.location.href;
+  value = url.split("/");
+  id = value[value.length - 2];
+  document.getElementById("leave_reject").value = id;
+
+</script>
+{% endblock %}

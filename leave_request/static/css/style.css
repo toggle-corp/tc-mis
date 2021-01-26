@@ -1,0 +1,27 @@
+#approve{
+    background-color: green;
+    color: white;
+    padding: 5px;
+    border: none;
+}
+
+#reject{
+    background-color: red;
+    color: white;
+    padding: 5px;
+    border: none;
+}
+
+.leave_request_btn:hover{
+    border:1px solid;
+}
+
+#reject_status{
+    color:red;
+    font-weight: bold;
+}
+
+#approve_status{
+    color:green;
+    font-weight: bold;
+}
