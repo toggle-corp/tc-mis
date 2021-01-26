@@ -1,1 +1,2 @@
 django-currentuser==0.5.2
+django-enumfield==2.0.2

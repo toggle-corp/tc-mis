@@ -92,7 +92,7 @@ TEMPLATES = [
         },
     },
 ]
-
+AUTH_USER_MODEL = 'employee.Employee'
 WSGI_APPLICATION = 'mis.wsgi.application'
 
 
