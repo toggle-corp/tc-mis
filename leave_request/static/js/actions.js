@@ -18,23 +18,23 @@
 
     $(".leave_request_btn").click(function (e) {
       _status = $(this).attr("id");
-      id = $(this).attr("value");
+      _id = $(this).attr("value");
 
       if (_status == "reject") {
         var r = confirm("Are you sure you want to reject it!");
         if (r == true) {
-          window.open(`reject/${id}/`);
+          window.location.href = "https://www.example.com";
+//          window.open(`reject/${_id}/`);
         }
       } else {
-        status = _status == "approve" ? 1 : 0;
         url = `actions/`;
         $.ajax({
           url: url,
           type: "POST",
           data: {
             csrfmiddlewaretoken: getCookie("csrftoken"),
-            id: id,
-            status: status,
+            id: _id,
+            status: _status,
           },
           success: function (data) {
             if (data.msg == "SUCCESS") location.reload();

@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterField(
             model_name='employee',
-            name='cititzen_document',
+            name='citizenship_document',
             field=models.ImageField(upload_to='images/citizenships/'),
         ),
         migrations.AlterField(

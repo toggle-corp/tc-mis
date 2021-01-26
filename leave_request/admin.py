@@ -13,9 +13,9 @@ class LeaveRequestAdmin(admin.ModelAdmin):
     exclude = ("employee", "status", "verified_by", "decline_reasons")
 
     def get_list_display(self, request):
-        if request.user.is_superuser is False:
-            return "employee", "start_date", 'end_date', "leave_type", "leave_details", "request_to", "reason_for_leave"
-        return "start_date", 'end_date', "leave_type", "leave_details", "request_to", "reason_for_leave"
+        if request.user.is_superuser:
+            return "employee", "start_date", 'end_date', "leave_type", "leave_details", "request_to", "reason_for_leave", "header_status"
+        return "start_date", 'end_date', "leave_type", "leave_details", "request_to", "reason_for_leave", "header_status"
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(LeaveRequestAdmin, self).get_form(request, obj, **kwargs)
@@ -61,7 +61,7 @@ class RequestAdmin(LeaveRequestAdmin):
 
     def action_btn(self, obj):
         return format_html(
-            "<button class='leave_request_btn' id='approve' value={} onClick='actions()'>Approve</button>&nbsp;&nbsp;<button class='leave_request_btn' id='reject' value={}>Reject</button>",
+            "<button class='leave_request_btn' id='approve' value={}>Approve</button>&nbsp;&nbsp;<button class='leave_request_btn' id='reject' value={}>Reject</button>",
             obj.pk, obj.pk
         )
 
