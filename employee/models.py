@@ -44,23 +44,14 @@ class Employee(UserResourceMixin, AbstractUser):
         ),
     ], null=True, blank=True, help_text="Phone number must be entered in the format '+977 9999999999'.")
     address = models.CharField(max_length=255, null=True, blank=True)
-    pan_no = models.CharField(
-        max_length=255, unique=True, null=True, blank=True)
-    citizenship_no = models.CharField(
-        max_length=255, unique=True, null=True, blank=True)
-    designation = models.ForeignKey(
-        Designation, on_delete=models.PROTECT, null=True, blank=True)
+    pan_no = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    citizenship_no = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    designation = models.ForeignKey(Designation, on_delete=models.PROTECT, null=True, blank=True)
     join_date = models.DateField(auto_now_add=True)
-    picture = models.ImageField(
-        upload_to='images/pictures/', blank=True, null=True)
-    pan_no_document = models.ImageField(
-        upload_to='images/pans/', blank=True, null=True)
-    citizenship_document = models.ImageField(
-        upload_to='images/citizenships/', blank=True, null=True
-    )
-    department = models.ForeignKey(
-        Department, on_delete=models.PROTECT, related_name='department', null=True
-    )
+    picture = models.ImageField(upload_to='images/pictures/', blank=True, null=True)
+    pan_no_document = models.ImageField(upload_to='images/pans/', blank=True, null=True)
+    citizenship_document = models.ImageField(upload_to='images/citizenships/', blank=True, null=True)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name='department', null=True)
     is_staff = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'
