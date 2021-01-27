@@ -76,6 +76,4 @@ class Employee(UserResourceMixin, AbstractUser):
         return self.is_superuser or app_label != 'department'
 
     def has_perm(self, perm, obj=None):
-        if perm is 'employee.view_designation':
-            return self.is_superuser
         return self.is_staff

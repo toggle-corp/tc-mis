@@ -38,11 +38,11 @@ class Request(LeaveRequest):
 
 
 def approve(modeladmin, request, queryset):
-    queryset.update(status=1, verified_by_id=request.user.id)
+    queryset.update(status=LeaveRequest.STATUSES.ACTIVE, verified_by_id=request.user.id)
 
 
 def reject(modeladmin, request, queryset):
-    queryset.update(status=0, verified_by_id=request.user.id)
+    queryset.update(status=LeaveRequest.STATUSES.INACTIVE, verified_by_id=request.user.id)
 
 
 class RequestAdmin(LeaveRequestAdmin):
