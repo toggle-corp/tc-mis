@@ -7,13 +7,13 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=P'T/4Nk6`T-+tSzL
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=mis
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8081
     volumes:
-      - .:/app
+      - .:/code
     ports:
       - 8082:8081
     depends_on:
