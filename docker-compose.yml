@@ -1,6 +1,14 @@
 version: '3.7'
 
 services:
+  db:
+    image: library/postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=P'T/4Nk6`T-+tSzL
+      - POSTGRES_DB=mis
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8081
@@ -10,14 +18,6 @@ services:
       - 8082:8081
     depends_on:
       - db
-  db:
-    image: library/postgres:12.0-alpine
-    volumes:
-    - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=hello_django
-      - POSTGRES_PASSWORD=hello_django
-      - POSTGRES_DB=mis
 
 volumes:
   postgres_data:
