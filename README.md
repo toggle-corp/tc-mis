@@ -1,53 +1,48 @@
-### For Development
-
-1. Run the following command to spawn your environment for the first time
-  
+Initial setup or Dockerfile is changed, make sure to update the containers with `docker-compose up -d` after a successful build.
 ```
-docker-compose -f docker-compose.yml -p mis up -d --build
+docker-compose build  
 ```
 
-See if the docker containers running
-
+To start the containers and view the logs. CTRL+C to stop the containers.
 ```
-docker ps
-```
-
-You'll see you containers like this
-
-```
-CONTAINER ID        IMAGE                     COMMAND                  CREATED              STATUS              PORTS                                                                NAMES
-ea3b914c3193        mis_web                   "python manage.py ru…"   About a minute ago   Up 58 seconds       0.0.0.0:8082->8081/tcp                                               mis_web_1
-57f30698ccda        postgres:12.0-alpine      "docker-entrypoint.s…"   About a minute ago   Up About a minute   5432/tcp   mis_db_1
+docker-compose up
 ```
 
-Connect to your `mis_web` with
-
+Starting the containers in detach mode.
 ```
-docker logs {{id}}
-```
-
-in this case
-
-```
-docker logs ea3b914c3193 -f
+docker-compose up -d
 ```
 
-press `CTRL+C` to exit logs view
-
-2. When you're done, you can do the following command
-
+To view containers logs, we can also specify service here.
 ```
-docker-compose -f docker-compose.yml -p mis stop
+docker-compose logs -f
 ```
 
-3. When you go back to code
+To stop and remove the containers.
+```
+docker-compose down
+```
 
+To stop|start|restart containers, we can also specify service here. NOTE: restart will not update the container's image.
 ```
-docker-compose -f docker-compose.yml -p mis start
+docker-compose stop|start|restart
 ```
 
-4. When you have to delete the environment
+To attach to container shell.
+```
+docker-compose exec web sh
+```
 
+To run commands directly inside the container.
 ```
-docker-compose -f docker-compose.yml -p mis down
+docker-compose exec web python3 manage.py createsuperuser
 ```
+
+For custom compose file
+```
+docker-compose -f docker-compose-custom.yml {COMMANDS}
+```
+
+For more, docker-compose -h or [https://docs.docker.com/compose/reference/](https://docs.docker.com/compose/reference/)
+
+Current `docker-compose.yml` is only meant for local development. Don't use it in production. Define a custom compose file production-compose.yml and use it with docker-compose -f production-compose.yml in production.
