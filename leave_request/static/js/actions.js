@@ -23,8 +23,7 @@
       if (_status == "reject") {
         var r = confirm("Are you sure you want to reject it!");
         if (r == true) {
-          window.location.href = "https://www.example.com";
-//          window.open(`reject/${_id}/`);
+          window.open(`reject/${_id}/`);
         }
       } else {
         url = `actions/`;

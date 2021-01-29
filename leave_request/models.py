@@ -1,9 +1,32 @@
+from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from django.db import models
-from django.utils.html import format_html
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.utils.html import format_html, strip_tags
 from django_currentuser.middleware import get_current_authenticated_user
 from django_enumfield import enum
 
 from employee.models import Employee
+
+
+class SendEmail:
+    @staticmethod
+    def send_mail(subject, content, from_email, to_email, html_content):
+        admin_employee = Employee.objects.filter(is_superuser=1, is_active=1).exclude(id=get_current_authenticated_user().id)
+        hr_list = [h.email for h in admin_employee]
+        to = hr_list
+        to.append(to_email)
+        try:
+            email = EmailMultiAlternatives(
+                subject,
+                content,
+                from_email,
+                [to]
+            )
+            email.attach_alternative(html_content, "text/html")
+            email.send()
+        except BadHeaderError:
+            return HttpResponse('Invalid header found.')
 
 
 class LeaveRequest(models.Model):
@@ -30,7 +53,8 @@ class LeaveRequest(models.Model):
     request_to = models.ForeignKey(Employee, on_delete=models.DO_NOTHING, related_name="request_to")
     reason_for_leave = models.CharField(max_length=500, blank=True, null=True)
     status = enum.EnumField(STATUSES, blank=True, null=True)
-    verified_by = models.ForeignKey(Employee, on_delete=models.DO_NOTHING, related_name="verified_by", blank=True, null=True)
+    verified_by = models.ForeignKey(Employee, on_delete=models.DO_NOTHING, related_name="verified_by", blank=True,
+                                    null=True)
     decline_reasons = models.CharField(max_length=500, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True)
     updated_at = models.DateTimeField(auto_now_add=True)
@@ -46,9 +70,19 @@ class LeaveRequest(models.Model):
     header_status.short_description = 'status'
 
     def save(self, *args, **kwargs):
+
         # Insert data
         if self.id is None:
             self.employee = get_current_authenticated_user()
-        # self.employee =
-        # self.verified_by =
+            from_username = get_current_authenticated_user()
+            content = "I request you to consider my leave application of  {leave_type} from {start_date} to {end_date}" \
+                .format(leave_type=self.leave_type, start_date=self.start_date, end_date=self.end_date)
+            html_content = render_to_string("email_template.html", {'name': from_username, 'content': content})
+
+            subject = "{from_username} has requested of {sick_leave} from {start_date} to {end_date}".format(
+                from_username=from_username, sick_leave=self.leave_type, start_date=self.start_date,
+                end_date=self.end_date)
+            text_content = strip_tags(html_content)
+            SendEmail.send_mail(subject, text_content, from_username, self.request_to.email, html_content)
+
         return super(LeaveRequest, self).save(*args, **kwargs)
