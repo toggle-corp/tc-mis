@@ -1,7 +1,6 @@
-import datetime
-
 from django.contrib import admin
 from django.template.loader import render_to_string
+from django.utils import timezone
 from django.utils.html import format_html, strip_tags
 
 from employee.models import Employee
@@ -14,13 +13,15 @@ class LeaveRequestAdmin(admin.ModelAdmin):
     exclude = ("employee", "status", "verified_by", "decline_reasons")
 
     def get_list_display(self, request):
+        list_display = ["start_date", 'end_date', "leave_type", "leave_details", "request_to", "reason_for_leave",
+                        "header_status"]
         if request.user.is_superuser:
-            return "employee", "start_date", 'end_date', "leave_type", "leave_details", "request_to", "reason_for_leave", "header_status"
-        return "start_date", 'end_date', "leave_type", "leave_details", "request_to", "reason_for_leave", "header_status"
+            return ["employee"] + list_display
+        return list_display
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(LeaveRequestAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['start_date'].initial = datetime.datetime.now()
+        form.base_fields['start_date'].initial = timezone.now()
         # Eliminate Login User
         employee_list = Employee.objects.filter(is_active=True, department=request.user.department).exclude(
             id=request.user.id)
@@ -29,14 +30,11 @@ class LeaveRequestAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         if request.user.is_superuser:
-            self.list_display = "employee"
             return self.model.objects.all()
         return self.model.objects.filter(employee_id=request.user.id)
 
     def has_add_permission(self, request):
-        if request.user.is_superuser:
-            return False
-        return True
+        return not request.user.is_superuser
 
 
 class Request(LeaveRequest):

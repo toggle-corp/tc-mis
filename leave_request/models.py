@@ -12,7 +12,7 @@ from employee.models import Employee
 class SendEmail:
     @staticmethod
     def send_mail(subject, content, from_email, to_email, html_content):
-        admin_employee = Employee.objects.filter(is_superuser=1, is_active=1).exclude(id=get_current_authenticated_user().id)
+        admin_employee = Employee.objects.filter(is_superuser=True, is_active=True).exclude(id=get_current_authenticated_user().id)
         hr_list = [h.email for h in admin_employee]
         to = hr_list
         to.append(to_email)
@@ -21,7 +21,7 @@ class SendEmail:
                 subject,
                 content,
                 from_email,
-                [to]
+                to
             )
             email.attach_alternative(html_content, "text/html")
             email.send()
@@ -34,13 +34,13 @@ class LeaveRequest(models.Model):
         INACTIVE = 0
         ACTIVE = 1
 
-    class LEAVETYPES(enum.Enum):
+    class LeaveTypes(enum.Enum):
         ANNUAL_LEAVE = 0
         SICK_LEAVE = 1
         BEREAVEMENT_LEAVE = 2
         OTHERS = 3
 
-    class LEAVEDETAILS(enum.Enum):
+    class LeaveDetails(enum.Enum):
         FULL_DAY = 0
         FIRST_HALF = 1
         SECOND_HALF = 2
@@ -48,8 +48,8 @@ class LeaveRequest(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.DO_NOTHING, related_name="employee")
     start_date = models.DateField()
     end_date = models.DateField()
-    leave_type = enum.EnumField(LEAVETYPES)
-    leave_details = enum.EnumField(LEAVEDETAILS, default=LEAVEDETAILS.FULL_DAY)
+    leave_type = enum.EnumField(LeaveTypes)
+    leave_details = enum.EnumField(LeaveDetails, default=LeaveDetails.FULL_DAY)
     request_to = models.ForeignKey(Employee, on_delete=models.DO_NOTHING, related_name="request_to")
     reason_for_leave = models.CharField(max_length=500, blank=True, null=True)
     status = enum.EnumField(STATUSES, blank=True, null=True)
@@ -63,7 +63,7 @@ class LeaveRequest(models.Model):
         return self.reason_for_leave
 
     def header_status(self):
-        if self.status == 0:
+        if self.status == self.STATUSES.INACTIVE:
             return format_html("<p id='reject_status' title='Reject'>R<p>")
         return format_html("<p id='approve_status' title='Approve'>A<p>")
 
