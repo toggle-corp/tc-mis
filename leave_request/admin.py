@@ -44,27 +44,25 @@ class Request(LeaveRequest):
 
 def approve(modeladmin, request, queryset):
     for obj in queryset:
-        content = "Your request has been approved from {start_date} to {end_date} ." \
-            .format(start_date=obj.start_date, end_date=obj.end_date)
+        content = f"Your request has been approved from {obj.start_date} to {obj.end_date} ."
         html_content = render_to_string("email_template.html", {'name': request.user, 'content': content})
         subject = "Your request has been approved."
         text_content = strip_tags(html_content)
         SendEmail.send_mail(subject, text_content, request.user.email, obj.employee.email, html_content)
 
-    queryset.update(status=LeaveRequest.STATUSES.ACTIVE, verified_by_id=request.user.id)
+    queryset.update(status=LeaveRequest.Statuses.ACTIVE, verified_by_id=request.user.id)
 
 
 def reject(modeladmin, request, queryset):
     for obj in queryset:
         decline_reasons = obj.decline_reasons or ""
-        content = "Your request has been rejected from {start_date} to {end_date}. {decline_reasons}" \
-            .format(start_date=obj.start_date, end_date=obj.end_date, decline_reasons=decline_reasons)
+        content = f"Your request has been rejected from {obj.start_date} to {obj.end_date}. {decline_reasons}"
         html_content = render_to_string("email_template.html", {'name': request.user, 'content': content})
         subject = "Your request has been rejected."
         text_content = strip_tags(html_content)
         SendEmail.send_mail(subject, text_content, request.user.email, obj.employee.email, html_content)
 
-    queryset.update(status=LeaveRequest.STATUSES.INACTIVE, verified_by_id=request.user.id)
+    queryset.update(status=LeaveRequest.Statuses.INACTIVE, verified_by_id=request.user.id)
 
 
 class RequestAdmin(LeaveRequestAdmin):

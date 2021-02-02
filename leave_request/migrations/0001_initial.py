@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('leave_type', django_enumfield.db.fields.EnumField(enum=leave_request.models.LeaveRequest.LeaveTypes)),
                 ('leave_details', django_enumfield.db.fields.EnumField(default=0, enum=leave_request.models.LeaveRequest.LeaveDetails)),
                 ('reason_for_leave', models.CharField(blank=True, max_length=500, null=True)),
-                ('status', django_enumfield.db.fields.EnumField(blank=True, enum=leave_request.models.LeaveRequest.STATUSES, null=True)),
+                ('status', django_enumfield.db.fields.EnumField(blank=True, enum=leave_request.models.LeaveRequest.Statuses, null=True)),
                 ('decline_reasons', models.CharField(blank=True, max_length=500, null=True)),
                 ('created_at', models.DateTimeField(auto_now=True)),
                 ('updated_at', models.DateTimeField(auto_now_add=True)),

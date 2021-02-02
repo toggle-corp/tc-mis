@@ -10,9 +10,9 @@ from .models import LeaveRequest, SendEmail
 def actions(request):
     if request.is_ajax and request.method == 'POST':
         _id = request.POST['id']
-        status = LeaveRequest.STATUSES.ACTIVE
+        status = LeaveRequest.Statuses.ACTIVE
         if request.POST['status'] == "reject":
-            status = LeaveRequest.STATUSES.INACTIVE
+            status = LeaveRequest.Statuses.INACTIVE
         leave_request_exist = LeaveRequest.objects.get(id=_id)
         if leave_request_exist:
             leave_request_exist.status = status
@@ -43,7 +43,7 @@ def reject(request):
         decline_reasons = request.POST['decline_reasons']
         leave_request_exist = LeaveRequest.objects.get(id=_id)
         if leave_request_exist:
-            leave_request_exist.status = LeaveRequest.STATUSES.INACTIVE
+            leave_request_exist.status = LeaveRequest.Statuses.INACTIVE
             leave_request_exist.decline_reasons = decline_reasons
             leave_request_exist.verified_by = get_current_authenticated_user()
             leave_request_exist.save()
