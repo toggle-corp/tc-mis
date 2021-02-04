@@ -9,9 +9,6 @@ from department.models import Department
 from .managers import EmployeeManager
 
 
-# Create your models here.
-
-
 class Designation(models.Model):
     type = models.CharField(max_length=100)
 
@@ -77,3 +74,6 @@ class Employee(UserResourceMixin, AbstractUser):
 
     def has_module_perms(self, app_label):
         return self.is_superuser or app_label != 'department'
+
+    def has_perm(self, perm, obj=None):
+        return self.is_staff

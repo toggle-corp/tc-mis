@@ -46,7 +46,8 @@ ALLOWED_HOSTS = []
 
 LOCAL_APPS = [
     'employee.apps.EmployeeConfig',
-    'department.apps.DepartmentConfig'
+    'department.apps.DepartmentConfig',
+    'leave_request.apps.LeaveRequestConfig'
 ]
 
 THIRD_PARTY_APPS = [
@@ -149,9 +150,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-PICTURE_URL = '/pictures/'
-PICTURE_ROOT = (
-    os.path.join(BASE_DIR, 'pictures')
-)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+EMAIL_BACKEND = get_secret('EMAIL_BACKEND')
