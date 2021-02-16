@@ -17,12 +17,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from django.views.generic.base import RedirectView
 
 urlpatterns = [
     path('admin/leave_request/request/', include('leave_request.urls')),
     path('admin/', admin.site.urls),
-    path('', RedirectView.as_view(url='/admin/login/?next=/admin/', permanent=True)),
+    path('', admin.site.urls, name='login'),
 ]
 
 if settings.DEBUG:
