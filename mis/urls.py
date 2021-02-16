@@ -19,7 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('leave_request/request/', include('leave_request.urls')),
+    path('leave_request/request/', include('leave_request.urls', namespace='leave_request')),
     path('', admin.site.urls),
 ]
 
