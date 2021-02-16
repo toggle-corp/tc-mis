@@ -19,9 +19,8 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/leave_request/request/', include('leave_request.urls')),
-    path('admin/', admin.site.urls),
-    path('', admin.site.urls, name='login'),
+    path('leave_request/request/', include('leave_request.urls')),
+    path('', admin.site.urls),
 ]
 
 if settings.DEBUG:

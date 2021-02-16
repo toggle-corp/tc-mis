@@ -57,5 +57,5 @@ def reject(request):
             text_content = strip_tags(html_content)
             SendEmail.send_mail(subject, text_content, leave_request_exist.verified_by.email,
                                 leave_request_exist.employee.email, html_content)
-            return redirect('/admin/leave_request/request')
+            return redirect('/leave_request/request')
     return render(request, 'reject.html')
