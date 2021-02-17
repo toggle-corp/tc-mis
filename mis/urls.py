@@ -25,8 +25,8 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    settings.EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 admin.site.site_header = "MIS Admin"
 admin.site.site_title = "MIS Admin"
