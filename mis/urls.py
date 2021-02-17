@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    path('company_profile/companyprofile/', include('company_profile.urls', namespace='company_profile')),
     path('leave_request/request/', include('leave_request.urls', namespace='leave_request')),
     path('', admin.site.urls),
 ]

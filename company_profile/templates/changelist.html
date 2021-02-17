@@ -1,0 +1,33 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="/admin/">MIS Admin</a>
+</h1>
+{% endblock branding %}
+
+{% block sidebar %}
+{% endblock sidebar%}
+{% block content %}
+
+<h1>Company Profile</h1>
+
+<table>
+    <thead>
+    <tr>
+        <th>Department</th>
+        <th>No. of Employee</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for employee in employees %}
+        <tr>
+            <td>{{employee.department}}</td>
+            <td>{{employee.count}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
