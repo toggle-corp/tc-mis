@@ -25,3 +25,37 @@
     color:green;
     font-weight: bold;
 }
+
+.company-logo {
+    background-color: white;
+    width: 200px;
+    height: 200px;
+    box-shadow: 0 5px 15px -5px rgb(0 0 0 / 50%);
+}
+section {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#about, #team {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: space-around;
+}
+#contact {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    min-height: 700px;
+}
+.img-container {
+    position: relative;
+    text-align: center;
+    color: #fff;
+}
+.bottom {
+  position: absolute;
+  bottom: 8px;
+  width: -webkit-fill-available;
+  background-color: rgb(236,94,40);
+}
