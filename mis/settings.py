@@ -158,5 +158,6 @@ if not DEBUG:
     AWS_SES_ACCESS_KEY_ID = get_secret('AWS_SES_ACCESS_KEY_ID') or AWS_ACCESS_KEY_ID
     AWS_SECRET_ACCESS_KEY = get_secret('AWS_SECRET_ACCESS_KEY')
     AWS_SES_SECRET_ACCESS_KEY = get_secret('AWS_SES_SECRET_ACCESS_KEY') or AWS_SECRET_ACCESS_KEY
+    EMAIL_BACKEND = get_secret('EMAIL_BACKEND')
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
