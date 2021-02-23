@@ -51,6 +51,7 @@ LOCAL_APPS = [
     'todo.apps.TodoConfig',
     'company_profile.apps.CompanyProfileConfig',
     'operation.apps.OperationConfig',
+    'notification.apps.NotificationConfig'
 ]
 
 THIRD_PARTY_APPS = [
