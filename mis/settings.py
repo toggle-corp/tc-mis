@@ -50,6 +50,7 @@ LOCAL_APPS = [
     'leave_request.apps.LeaveRequestConfig',
     'todo.apps.TodoConfig',
     'company_profile.apps.CompanyProfileConfig',
+    'operation.apps.OperationConfig',
 ]
 
 THIRD_PARTY_APPS = [
