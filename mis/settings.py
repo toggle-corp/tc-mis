@@ -153,4 +153,11 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-EMAIL_BACKEND = get_secret('EMAIL_BACKEND')
+if not DEBUG:
+    AWS_ACCESS_KEY_ID = get_secret('AWS_ACCESS_KEY_ID')
+    AWS_SES_ACCESS_KEY_ID = get_secret('AWS_SES_ACCESS_KEY_ID') or AWS_ACCESS_KEY_ID
+    AWS_SECRET_ACCESS_KEY = get_secret('AWS_SECRET_ACCESS_KEY')
+    AWS_SES_SECRET_ACCESS_KEY = get_secret('AWS_SES_SECRET_ACCESS_KEY') or AWS_SECRET_ACCESS_KEY
+    EMAIL_BACKEND = 'django_ses.SESBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
