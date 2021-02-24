@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.urls import reverse
 from django.utils.html import strip_tags
 from django_currentuser.middleware import get_current_authenticated_user
 
@@ -57,5 +58,5 @@ def reject(request):
             text_content = strip_tags(html_content)
             SendEmail.send_mail(subject, text_content, leave_request_exist.verified_by.email,
                                 leave_request_exist.employee.email, html_content)
-            return redirect('/admin/leave_request/request')
+            return redirect(reverse('admin:leave_request_leaverequest_changelist'))
     return render(request, 'reject.html')
