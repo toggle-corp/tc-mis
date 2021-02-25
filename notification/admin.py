@@ -4,7 +4,7 @@ from .models import Notification
 
 
 class NotificationAdmin(admin.ModelAdmin):
-    exclude = ["created_by"]
+    exclude = ["created_by", "content_type"]
 
     def has_add_permission(self, request):
         return request.user.is_superuser
