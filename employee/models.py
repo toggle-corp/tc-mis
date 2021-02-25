@@ -47,7 +47,7 @@ class Employee(UserResourceMixin, AbstractUser):
     picture = models.ImageField(upload_to='images/pictures/', blank=True, null=True)
     pan_no_document = models.ImageField(upload_to='images/pans/', blank=True, null=True)
     citizenship_document = models.ImageField(upload_to='images/citizenships/', blank=True, null=True)
-    department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name='department', null=True)
+    department = models.ForeignKey(Department, on_delete=models.PROTECT, related_name='employee_department', null=True)
     is_staff = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'

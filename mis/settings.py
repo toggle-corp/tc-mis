@@ -48,7 +48,8 @@ LOCAL_APPS = [
     'employee.apps.EmployeeConfig',
     'department.apps.DepartmentConfig',
     'leave_request.apps.LeaveRequestConfig',
-    'todo.apps.TodoConfig'
+    'todo.apps.TodoConfig',
+    'company_profile.apps.CompanyProfileConfig',
 ]
 
 THIRD_PARTY_APPS = [

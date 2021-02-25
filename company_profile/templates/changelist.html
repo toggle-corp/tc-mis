@@ -1,0 +1,69 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+{% load static %}
+{% block extrahead %}
+{{ block.super }}
+<link href="{% static 'css/style.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">MIS Admin</a>
+</h1>
+{% endblock branding %}
+
+{% block content %}
+<section id="about">
+    <div>
+        <img src="https://togglecorp.com/favicon.ico" alt="ToggleCorp" title="ToggleCorp" class="company-logo"/>
+    </div>
+    <div>
+        <table>
+            <thead>
+            <tr>
+                <th>Department</th>
+                <th>No. of Employee</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for employee_department in employee_departments %}
+            <tr>
+                <td>{{employee_department}}</td>
+                <td>{{employee_department.employee_count}}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+<section id="team">
+    <h1>Our Team</h1>
+    {% for employee in employees %}
+    <div class="img-container">
+        {% if employee.picture %}
+        <img src="{{ employee.picture.url }}" alt="{{ employee.fullname }}" width="250" height="250">
+        {% else %}
+        <img src="https://togglecorp.com/favicon.ico" alt="{{ employee.fullname }}" width="250" height="250"/>
+        {% endif %}
+        <div class="bottom">
+            <p>{{employee.fullname}}</p>
+            <p>{{employee.email}}</p>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+<section id="contact">
+    <div>
+        <h1>Contact Us</h1>
+        <p>Email: <a href="mailto:info@togglecorp.com" title="ToggleCorp">info@togglecorp.com</a></p>
+        <p>Contact: +977-9841331922, +977-9841919399</p>
+        <p>Address: Bhanimandal, Patan, Nepal</p>
+    </div>
+    <div>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7067.0842245119175!2d85.30754900000001!3d27.669635!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xe38fc6d7cff6e8e8!2sTogglecorp%20Solutions%20Pvt.%20Ltd.!5e0!3m2!1sen!2snp!4v1613631872702!5m2!1sen!2snp"
+                width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false"
+                tabindex="0"></iframe>
+    </div>
+</section>
+
+{% endblock %}
