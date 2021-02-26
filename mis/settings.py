@@ -157,6 +157,8 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+DEFAULT_FROM_EMAIL = get_secret('DEFAULT_FROM_EMAIL')
+
 if not DEBUG:
     AWS_ACCESS_KEY_ID = get_secret('AWS_ACCESS_KEY_ID')
     AWS_SES_ACCESS_KEY_ID = get_secret('AWS_SES_ACCESS_KEY_ID') or AWS_ACCESS_KEY_ID
