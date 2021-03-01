@@ -51,6 +51,7 @@ LOCAL_APPS = [
     'todo.apps.TodoConfig',
     'company_profile.apps.CompanyProfileConfig',
     'operation.apps.OperationConfig',
+    'wall_activity.apps.WallActivityConfig',
 ]
 
 THIRD_PARTY_APPS = [
