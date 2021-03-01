@@ -51,6 +51,7 @@ LOCAL_APPS = [
     'todo.apps.TodoConfig',
     'company_profile.apps.CompanyProfileConfig',
     'operation.apps.OperationConfig',
+    'expense_claim.apps.ExpenseClaimConfig',
 ]
 
 THIRD_PARTY_APPS = [
