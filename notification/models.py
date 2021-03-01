@@ -12,8 +12,8 @@ from employee.models import Employee
 class Notification(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    files = models.FileField(upload_to='files/notifications/', blank=True, null=True)
-    content_type = models.CharField(null=True, blank=True, max_length=100)
+    file = models.FileField(upload_to='file/notifications/', blank=True, null=True)
+    file_type = models.CharField(null=True, blank=True, max_length=100)
     created_by = CurrentUserField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -21,7 +21,7 @@ class Notification(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        self.content_type = self.files.file.content_type
+        self.file_type = self.files.file.content_type
         super().save(*args, **kwargs)
 
 
