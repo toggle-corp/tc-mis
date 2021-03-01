@@ -51,6 +51,7 @@ LOCAL_APPS = [
     'todo.apps.TodoConfig',
     'company_profile.apps.CompanyProfileConfig',
     'operation.apps.OperationConfig',
+    'notification.apps.NotificationConfig'
 ]
 
 THIRD_PARTY_APPS = [
@@ -155,6 +156,8 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+DEFAULT_FROM_EMAIL = get_secret('DEFAULT_FROM_EMAIL')
 
 if not DEBUG:
     AWS_ACCESS_KEY_ID = get_secret('AWS_ACCESS_KEY_ID')
